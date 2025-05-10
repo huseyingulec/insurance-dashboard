@@ -15,11 +15,14 @@ export type Claim = {
   customerId: string;
   customerName: string;
   region: string;
+  province: string;
   date: string;
   amount: number;
   status: "Pending" | "Approved" | "Rejected" | "Under Review";
   description: string;
   aiEvaluation: "Likely Valid" | "Requires Review" | "Likely Fraudulent";
+  heatmap?: any; // Optional field for heatmap image URL
+  chart?: ChartData[]; // Optional chart property
 };
 
 export type Customer = {
@@ -31,6 +34,10 @@ export type Customer = {
   carYear: number;
   email: string;
   phone: string;
+};
+type ChartData = {
+  amount: number;
+  count: number;
 };
 
 // Dummy data for regions
@@ -58,33 +65,68 @@ const dummyClaims: Claim[] = [
     customerId: "C001",
     customerName: "Mario Rossi",
     region: "Lombardy",
+    province: "Milano",
     date: "2025-05-01",
     amount: 5000,
     status: "Approved",
     description: "Car accident on highway",
     aiEvaluation: "Likely Valid",
+    heatmap: "/public/heat-map-fiat-500.png",
+    chart: [
+      { amount: 500.0, count: 36 },
+      { amount: 1500.0, count: 51 },
+      { amount: 2500.0, count: 45 },
+      { amount: 3500.0, count: 12 },
+      { amount: 4500.0, count: 2 },
+      { amount: 5500.0, count: 3 },
+      { amount: 6500.0, count: 1 },
+      { amount: 7500.0, count: 0 },
+      { amount: 8500.0, count: 1 },
+    ],
   },
   {
     id: "CL002",
     customerId: "C002",
     customerName: "Luigi Bianchi",
     region: "Lazio",
+    province: "Roma",
     date: "2025-04-15",
     amount: 3000,
     status: "Pending",
     description: "Damage from hailstorm",
     aiEvaluation: "Requires Review",
+    heatmap: "/public/heat-golf.png",
+    chart: [
+      { amount: 100.0, count: 3 },
+      { amount: 300.0, count: 3 },
+      { amount: 500.0, count: 13 },
+      { amount: 700.0, count: 21 },
+      { amount: 900.0, count: 1 },
+      { amount: 1100.0, count: 1 },
+    ],
   },
   {
     id: "CL003",
     customerId: "C003",
     customerName: "Giovanni Ferrari",
-    region: "Campania",
+    region: "Piedmont",
+    province: "Torino",
     date: "2025-03-20",
     amount: 7000,
     status: "Rejected",
     description: "Theft from parking lot",
     aiEvaluation: "Likely Fraudulent",
+    heatmap: "/public/heat-map-focus.png",
+    chart: [
+      { amount: 500.0, count: 17 },
+      { amount: 1500.0, count: 18 },
+      { amount: 2500.0, count: 30 },
+      { amount: 3500.0, count: 8 },
+      { amount: 4500.0, count: 4 },
+      { amount: 5500.0, count: 2 },
+      { amount: 6500.0, count: 3 },
+      { amount: 7500.0, count: 2 },
+    ],
   },
 ];
 
@@ -93,7 +135,7 @@ const dummyCustomers: Customer[] = [
   {
     id: "C001",
     name: "Mario Rossi",
-    age: 35,
+    age: 50,
     carBrand: "Fiat",
     carModel: "500",
     carYear: 2020,
@@ -103,7 +145,7 @@ const dummyCustomers: Customer[] = [
   {
     id: "C002",
     name: "Luigi Bianchi",
-    age: 42,
+    age: 29,
     carBrand: "Volkswagen",
     carModel: "Golf",
     carYear: 2018,
@@ -113,13 +155,22 @@ const dummyCustomers: Customer[] = [
   {
     id: "C003",
     name: "Giovanni Ferrari",
-    age: 29,
-    carBrand: "BMW",
-    carModel: "3 Series",
+    age: 38,
+    carBrand: "Ford",
+    carModel: "Focus",
     carYear: 2021,
     email: "giovanni.ferrari@example.com",
     phone: "+39 300 3456789",
   },
+];
+
+const dummychartData = [
+  { month: "January", desktop: 186 },
+  { month: "February", desktop: 305 },
+  { month: "March", desktop: 237 },
+  { month: "April", desktop: 73 },
+  { month: "May", desktop: 209 },
+  { month: "June", desktop: 214 },
 ];
 
 // Export dummy data
@@ -129,6 +180,10 @@ export function generateRegionData(): Region[] {
 
 export function generateCarBrandData(): CarBrand[] {
   return dummyCarBrands;
+}
+
+export function generateChartData(): any[] {
+  return dummychartData;
 }
 
 export function generateClaims(): Claim[] {
